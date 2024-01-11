@@ -67,7 +67,7 @@ class ProgressMeter(object):
 # logger
 # --------------------------------
 def get_timestamp():
-    return datetime.now().strftime("%y-%m-%d-%H:%M:%S")
+    return datetime.now().strftime("%y-%m-%d-%H_%M_%S")
 
 
 class LOG(object):
