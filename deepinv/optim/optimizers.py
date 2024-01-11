@@ -347,7 +347,7 @@ class BaseOptim(nn.Module):
         :return dict: A dictionary containing the metrics.
         """
         init = {}
-        x_init = self.get_output(X_init)
+        x_init,*oth = self.get_output(X_init)
         self.batch_size = x_init.shape[0]
         if x_gt is not None:
             psnr = [[cal_psnr(x_init[i], x_gt[i])] for i in range(self.batch_size)]
@@ -373,8 +373,8 @@ class BaseOptim(nn.Module):
         :return dict: a dictionary containing the updated metrics.
         """
         if metrics is not None:
-            x_prev = self.get_output(X_prev)
-            x = self.get_output(X)
+            x_prev,*oth = self.get_output(X_prev)
+            x,*oth = self.get_output(X)
             for i in range(self.batch_size):
                 residual = (
                     ((x_prev[i] - x[i]).norm() / (x[i].norm() + 1e-06))
@@ -408,8 +408,8 @@ class BaseOptim(nn.Module):
         :param dict X: dictionary containing the current primal and dual iterates.
         """
         if self.backtracking and self.has_cost and X_prev is not None:
-            x_prev = X_prev["est"][0]
-            x = X["est"][0]
+            x_prev,*oth = self.get_output(X_prev)
+            x,*oth = self.get_output(X)
             x_prev = x_prev.reshape((x_prev.shape[0], -1))
             x = x.reshape((x.shape[0], -1))
             F_prev, F = X_prev["cost"], X["cost"]
@@ -441,8 +441,8 @@ class BaseOptim(nn.Module):
         :return bool: ``True`` if the algorithm has converged, ``False`` otherwise.
         """
         if self.crit_conv == "residual":
-            x_prev = self.get_output(X_prev)
-            x = self.get_output(X)
+            x_prev,*oth = self.get_output(X_prev)
+            x,*oth = self.get_output(X)
             x_prev = x_prev.reshape((x_prev.shape[0], -1))
             x = x.reshape((x.shape[0], -1))
             crit_cur = (
