@@ -211,7 +211,7 @@ def plot(
         return fig
 
 
-def plot_curves(metrics, save_dir=None, show=True):
+def plot_curves(metrics, save_dir=None, show=True, return_fig=False):
     r"""
     Plots the metrics of a Plug-and-Play algorithm.
 
@@ -264,6 +264,8 @@ def plot_curves(metrics, save_dir=None, show=True):
         plt.savefig(save_dir / "curves.png")
     if show:
         plt.show()
+    if return_fig:
+        return fig
 
 
 def wandb_imgs(imgs, captions, n_plot):
