@@ -39,6 +39,7 @@ def train(
     ckpt_pretrained=None,
     fact_losses=None,
     freq_plot=1,
+    return_loss=False
 ):
     r"""
     Trains a reconstruction network.
@@ -346,6 +347,8 @@ def train(
     if wandb_vis:
         wandb.save("model.h5")
 
+    if return_loss:
+        return model, loss_history
     return model
 
 
