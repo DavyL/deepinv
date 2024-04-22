@@ -79,6 +79,7 @@ class BaseUnfold(BaseOptim):
         # The prior (list of instances of :class:`deepinv.optim.Prior`) is converted to a `nn.ModuleList` to be trainable.
         self.prior = nn.ModuleList(self.prior)
         self.data_fidelity = nn.ModuleList(self.data_fidelity)
+        self.trainable_params = trainable_params
 
 
 def unfolded_builder(
