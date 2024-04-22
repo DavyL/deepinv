@@ -115,7 +115,9 @@ class Prior(nn.Module):
         :param float lamb: math:`\lambda` parameter in front of :math:`f`
         :return: (torch.tensor) proximity operator :math:`\operatorname{prox}_{\gamma \lambda g)^*}(x)`, computed in :math:`x`.
         """
-        return x - gamma * self.prox(x / gamma, lamb / gamma, *args, **kwargs)
+        #print(f'In prox conjugate, using new def')
+        #return x/lamb - (gamma/lamb) * self.prox(x / (lamb*gamma**2), lamb/gamma, *args, **kwargs)
+        return x - gamma * self.prox(x / gamma, gamma=lamb / gamma, *args, **kwargs)
 
 
 class Zero(Prior):
