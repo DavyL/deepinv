@@ -39,7 +39,8 @@ def train(
     ckpt_pretrained=None,
     fact_losses=None,
     freq_plot=1,
-    return_loss=False
+    return_loss=False,
+    max_pixel_psnr = 1
 ):
     r"""
     Trains a reconstruction network.
@@ -130,7 +131,7 @@ def train(
     G = len(train_dataloader)
 
     loss_history = []
-
+    psnr_history = []
     log_dict = {}
 
     epoch_start = 0
@@ -232,6 +233,7 @@ def train(
 
                 # run the forward model
                 x_net, *oth = model(y, physics_cur)
+                #x_net = model(y, physics_cur)
 
                 # compute the losses
                 loss_total = 0
@@ -272,13 +274,13 @@ def train(
                 # training psnr and logging
                 if not unsupervised:
                     with torch.no_grad():
-                        psnr = cal_psnr(x_net, x)
+                        psnr = cal_psnr(x_net, x, max_pixel=max_pixel_psnr)
                         train_psnr.update(psnr)
                         if wandb_vis:
                             wandb_log_dict_iter["train_psnr"] = psnr
                             wandb.log(wandb_log_dict_iter)
                         log_dict["train_psnr"] = train_psnr.avg
-
+                        psnr_history.append(psnr)
                 progress_bar.set_postfix(log_dict)
 
         # wandb plotting of training images
@@ -348,7 +350,7 @@ def train(
         wandb.save("model.h5")
 
     if return_loss:
-        return model, loss_history
+        return model, loss_history, psnr_history
     return model
 
 
